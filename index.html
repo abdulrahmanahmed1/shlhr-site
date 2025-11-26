@@ -128,6 +128,23 @@
 
     [dir="rtl"] .text-start {text-align:right!important;}
     [dir="rtl"] .text-end {text-align:left!important;}
+
+    html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.navbar .container {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* إصلاح مشكلة RTL مع Bootstrap */
+[dir="rtl"] .navbar-nav {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+}
+
   </style>
 </head>
 <body>
@@ -139,7 +156,7 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg fixed-top">
+  <!-- <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">
         <img src="HR_logo-removebg-preview (1).png" alt="SHL HR Logo" class="logo-img">
@@ -148,7 +165,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-center">
+        <ul class="navbar-nav me-auto align-items-center text-center">
           <li class="nav-item"><a class="nav-link fw-600" href="#features" data-key="nav_features">المميزات</a></li>
           <li class="nav-item"><a class="nav-link fw-600" href="#about" data-key="nav_about">عن النظام</a></li>
           <li class="nav-item"><a class="nav-link fw-600" href="#contact" data-key="nav_contact">تواصل معنا</a></li>
@@ -158,7 +175,37 @@
         </ul>
       </div>
     </div>
-  </nav>
+  </nav> -->
+
+  <nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="HR_logo-removebg-preview (1).png" alt="SHL HR Logo" class="logo-img">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav align-items-center text-center">
+        <li class="nav-item">
+            <a class="nav-link fw-600" href="#features" data-key="nav_features"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-600" href="#about" data-key="nav_about"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-600" href="#contact" data-key="nav_contact"></a>
+        </li>
+        <li class="nav-item mt-2 mt-lg-0 ms-lg-3">
+            <a href="https://app.shl-hr.com" target="_blank" class="btn btn-primary" data-key="login_btn"></a>
+        </li>
+        </ul>
+    </div>
+  </div>
+</nav>
+
 
   <!-- باقي الصفحة (Hero, Features, About, Download, Contact, Footer) -->
   <!-- نفس الكود اللي عندك بالكامل من غير أي تغيير -->
@@ -360,27 +407,41 @@ const translations = {
       }
     };
 
-    // Language Switch
-    document.querySelectorAll('[data-lang]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const lang = btn.dataset.lang;
-        document.documentElement.lang = lang;
-        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    function setLanguage(lang) {
+  document.querySelectorAll("[data-key]").forEach(el => {
+    const key = el.getAttribute("data-key");
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
 
-        document.querySelectorAll('[data-lang]').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+  document.querySelectorAll("[data-key-ph]").forEach(el => {
+    const key = el.getAttribute("data-key-ph");
+    if (translations[lang][key]) {
+      el.placeholder = translations[lang][key];
+    }
+  });
 
-        document.querySelectorAll('[data-key]').forEach(el => {
-          const key = el.dataset.key;
-          if (translations[lang][key]) el.textContent = translations[lang][key];
-        });
-        document.querySelectorAll('[data-key-ph]').forEach(el => {
-          const key = el.dataset.keyPh;
-          if (translations[lang][key]) el.placeholder = translations[lang][key];
-        });
-        document.title = translations[lang].page_title;
-      });
-    });
+  document.title = translations[lang].page_title;
+}
+
+// أزرار تغيير اللغة
+document.querySelectorAll("[data-lang]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const lang = btn.dataset.lang;
+
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+    document.querySelectorAll("[data-lang]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    setLanguage(lang);
+  });
+});
+
+// اللغة الافتراضية
+setLanguage("ar");
 
     // Navbar scroll effect
     window.addEventListener('scroll', () => {
